@@ -1079,7 +1079,7 @@
     </a>
     <div class="nav-right">
       <a href="#pricing" class="nav-link">Pricing</a>
-      <a href="#" class="nav-link">Sign in</a>
+      <a href="#" class="nav-link" onclick="openModal('pro'); return false;">Sign in</a>
       <button class="btn-nav" onclick="openModal()">Start Free</button>
     </div>
   </nav>
@@ -1551,11 +1551,8 @@
   });
 </script>
 
-<!-- STRIPE -->
-<script src="https://js.stripe.com/v3/"></script>
+<!-- PAYMENT -->
 <script>
-  const stripe = Stripe('pk_live_51TAzlRJGf3rNi1CH0kmMfs7yczQBexncGOmUbI9ijzOdH1fFPUz5ofkxwjKmNMCucji4Ei2PkJMWNIBGd6eYrJHh00b3hJ2Qd9');
-
   let selectedPlan = 'pro';
 
   // Open modal with correct plan
