@@ -188,9 +188,9 @@ input[type="range"]::-webkit-slider-thumb { -webkit-appearance:none; width:16px;
 .plan-features { list-style:none; margin-bottom:28px; }
 .plan-features li { font-size:13px; color:var(--text2); padding:8px 0; border-bottom:1px solid var(--border); display:flex; align-items:center; gap:10px; line-height:1.4; }
 .plan-features li:last-child { border-bottom:none; }
-.plan-features li::before { content:'&#10003;'; color:var(--blue); font-size:12px; flex-shrink:0; }
+.plan-features li::before { content:'\2713'; color:var(--blue); font-size:12px; flex-shrink:0; }
 .plan-features li.locked { opacity:0.35; }
-.plan-features li.locked::before { content:'&#10005;'; color:var(--text3); }
+.plan-features li.locked::before { content:'\2715'; color:var(--text3); }
 .btn-plan { width:100%; padding:13px; border-radius:8px; font-family:'Syne',sans-serif; font-size:14px; font-weight:700; cursor:pointer; letter-spacing:0.05em; transition:all 0.2s; border:1px solid var(--border2); background:var(--bg3); color:var(--text); }
 .btn-plan:hover { background:var(--bg4); border-color:var(--blue); }
 .btn-plan.primary { background:var(--blue); border-color:var(--blue); color:white; }
@@ -212,7 +212,7 @@ footer a:hover { color:var(--text2); }
 .modal p { color:var(--text2); font-size:14px; line-height:1.6; margin-bottom:24px; }
 .modal-features { list-style:none; margin-bottom:28px; }
 .modal-features li { font-size:13px; color:var(--text2); padding:6px 0; display:flex; align-items:center; gap:10px; }
-.modal-features li::before { content:'&#10003;'; color:var(--success); font-weight:700; }
+.modal-features li::before { content:'\2713'; color:var(--success); font-weight:700; }
 .modal-price { text-align:center; margin-bottom:20px; }
 .modal-price .price-big { font-family:'Syne',sans-serif; font-size:48px; font-weight:800; color:var(--text); letter-spacing:-2px; }
 .modal-price .price-period { font-size:13px; color:var(--text3); }
@@ -303,7 +303,7 @@ footer a:hover { color:var(--text2); }
   <div class="nav-right">
     <span class="nav-link" onclick="showPage('home');setTimeout(function(){document.getElementById('pricing').scrollIntoView({behavior:'smooth'});},50)">Pricing</span>
     <span class="nav-link" onclick="openModal('pro')">Sign In</span>
-    <button class="btn-nav" onclick="document.getElementById('builder').scrollIntoView({behavior:'smooth',block:'start'})">Start Free</button>
+    <button class="btn-nav" onclick="showPage('home');setTimeout(function(){document.getElementById('builder').scrollIntoView({behavior:'smooth',block:'start'});},50)">Start Free</button>
   </div>
 </nav>
 
