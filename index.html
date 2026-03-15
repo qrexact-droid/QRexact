@@ -3,319 +3,311 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>QRexact — QR Code Generator | Create Custom QR Codes Instantly</title>
+<title>QRexact &mdash; Free QR Code Generator | Create Custom QR Codes Instantly</title>
 <meta name="description" content="Create professional QR codes instantly with QRexact. Custom colors, logo embedding, scan analytics. Free to start. Pro from $6.99/month.">
+<meta name="robots" content="index, follow">
+<meta name="keywords" content="QR code generator, free QR code, custom QR codes, QR code maker, business QR codes, QR code with logo">
+<link rel="canonical" href="https://qrexact.com/">
+<meta property="og:title" content="QRexact &mdash; Free QR Code Generator">
+<meta property="og:description" content="Create professional QR codes instantly. Custom colors, logo embedding, scan analytics. Free to start.">
+<meta property="og:image" content="https://qrexact.com/og-image.png">
+<meta property="og:url" content="https://qrexact.com">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="QRexact">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="QRexact &mdash; Free QR Code Generator">
+<meta name="twitter:description" content="Create professional QR codes instantly. Custom colors, logo embedding, scan analytics. Free to start.">
+<meta name="twitter:image" content="https://qrexact.com/og-image.png">
+<script type="application/ld+json">
+{
+  "@context":"https://schema.org",
+  "@type":"WebApplication",
+  "name":"QRexact",
+  "url":"https://qrexact.com",
+  "description":"Create professional QR codes instantly with custom colors, logo embedding, and scan analytics.",
+  "applicationCategory":"UtilitiesApplication",
+  "operatingSystem":"Any",
+  "offers":[
+    {"@type":"Offer","name":"Free","price":"0","priceCurrency":"USD"},
+    {"@type":"Offer","name":"Pro","price":"6.99","priceCurrency":"USD","billingIncrement":"P1M"},
+    {"@type":"Offer","name":"Business","price":"19.99","priceCurrency":"USD","billingIncrement":"P1M"}
+  ]
+}
+</script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Mono:wght@300;400;500&display=swap" rel="stylesheet">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
 <style>
-  /* ─── RESET & VARIABLES ─── */
-  * { margin:0; padding:0; box-sizing:border-box; }
-  :root {
-    --bg:#080a0f; --bg2:#0d1017; --bg3:#131720; --bg4:#1a2030;
-    --border:#1e2535; --border2:#2a3347;
-    --blue:#3b82f6; --blue2:#60a5fa;
-    --text:#f0f4ff; --text2:#8b99b5; --text3:#4a5568;
-    --success:#10b981; --pro:#f59e0b;
-  }
-  html, body { overflow-x:hidden; max-width:100vw; }
-  body {
-    background:var(--bg); color:var(--text);
-    font-family:'DM Mono',monospace; min-height:100vh;
-  }
-  body::before {
-    content:''; position:fixed; inset:0;
-    background-image:
-      linear-gradient(var(--border) 1px, transparent 1px),
-      linear-gradient(90deg, var(--border) 1px, transparent 1px);
-    background-size:40px 40px; opacity:0.3; pointer-events:none; z-index:0;
-  }
-  body::after {
-    content:''; position:fixed; top:-200px; left:50%; transform:translateX(-50%);
-    width:600px; height:600px;
-    background:radial-gradient(circle, rgba(59,130,246,0.08) 0%, transparent 70%);
-    pointer-events:none; z-index:0;
-  }
-  .wrapper { position:relative; z-index:1; overflow-x:hidden; }
+* { margin:0; padding:0; box-sizing:border-box; }
+:root {
+  --bg:#080a0f; --bg2:#0d1017; --bg3:#131720; --bg4:#1a2030;
+  --border:#1e2535; --border2:#2a3347;
+  --blue:#3b82f6; --blue2:#60a5fa;
+  --text:#f0f4ff; --text2:#8b99b5; --text3:#4a5568;
+  --success:#10b981; --pro:#f59e0b;
+}
+html,body { overflow-x:hidden; max-width:100vw; }
+body { background:var(--bg); color:var(--text); font-family:'DM Mono',monospace; min-height:100vh; }
+body::before {
+  content:''; position:fixed; inset:0;
+  background-image:linear-gradient(var(--border) 1px,transparent 1px),linear-gradient(90deg,var(--border) 1px,transparent 1px);
+  background-size:40px 40px; opacity:0.3; pointer-events:none; z-index:0;
+}
+body::after {
+  content:''; position:fixed; top:-200px; left:50%; transform:translateX(-50%);
+  width:600px; height:600px;
+  background:radial-gradient(circle,rgba(59,130,246,0.08) 0%,transparent 70%);
+  pointer-events:none; z-index:0;
+}
+.wrapper { position:relative; z-index:1; overflow-x:hidden; }
+.page { display:none; }
+.page.active { display:block; }
 
-  /* ─── PAGES ─── */
-  .page { display:none; }
-  .page.active { display:block; }
+/* NAV */
+nav { display:flex; align-items:center; justify-content:space-between; padding:20px 60px; border-bottom:1px solid var(--border); background:rgba(8,10,15,0.85); backdrop-filter:blur(20px); position:sticky; top:0; z-index:100; }
+.logo { display:flex; align-items:center; gap:12px; text-decoration:none; cursor:pointer; margin-right:auto; }
+.logo-icon { width:34px; height:34px; flex-shrink:0; }
+.logo-icon svg { width:100%; height:100%; }
+.logo-text { font-family:'Syne',sans-serif; font-size:20px; font-weight:800; letter-spacing:-0.5px; color:var(--text); white-space:nowrap; }
+.logo-text span { color:var(--blue); }
+.nav-right { display:flex; align-items:center; gap:28px; margin-left:40px; }
+.nav-link { color:var(--text2); text-decoration:none; font-size:13px; letter-spacing:0.05em; transition:color 0.2s; cursor:pointer; }
+.nav-link:hover { color:var(--text); }
+.btn-nav { background:var(--blue); color:white; border:none; padding:9px 20px; border-radius:6px; font-family:'DM Mono',monospace; font-size:13px; font-weight:500; cursor:pointer; letter-spacing:0.05em; transition:all 0.2s; }
+.btn-nav:hover { background:var(--blue2); transform:translateY(-1px); }
 
-  /* ─── NAV ─── */
-  nav {
-    display:flex; align-items:center; justify-content:space-between;
-    padding:20px 60px; border-bottom:1px solid var(--border);
-    background:rgba(8,10,15,0.85); backdrop-filter:blur(20px);
-    position:sticky; top:0; z-index:100;
-  }
-  .logo { display:flex; align-items:center; gap:12px; text-decoration:none; cursor:pointer; margin-right:auto; }
-  .logo-icon { width:34px; height:34px; flex-shrink:0; }
-  .logo-icon svg { width:100%; height:100%; }
-  .logo-text { font-family:'Syne',sans-serif; font-size:20px; font-weight:800; letter-spacing:-0.5px; color:var(--text); white-space:nowrap; }
-  .logo-text span { color:var(--blue); }
-  .nav-right { display:flex; align-items:center; gap:28px; margin-left:40px; }
-  .nav-link { color:var(--text2); text-decoration:none; font-size:13px; letter-spacing:0.05em; transition:color 0.2s; cursor:pointer; }
-  .nav-link:hover { color:var(--text); }
-  .btn-nav {
-    background:var(--blue); color:white; border:none; padding:9px 20px; border-radius:6px;
-    font-family:'DM Mono',monospace; font-size:13px; font-weight:500;
-    cursor:pointer; letter-spacing:0.05em; transition:all 0.2s;
-  }
-  .btn-nav:hover { background:var(--blue2); transform:translateY(-1px); }
+/* HERO */
+.hero { text-align:center; padding:80px 40px 60px; max-width:800px; margin:0 auto; }
+.hero-badge { display:inline-flex; align-items:center; gap:8px; background:rgba(59,130,246,0.1); border:1px solid rgba(59,130,246,0.2); color:var(--blue2); padding:6px 16px; border-radius:99px; font-size:12px; letter-spacing:0.1em; text-transform:uppercase; margin-bottom:32px; animation:fadeDown 0.6s ease both; }
+.hero-badge::before { content:''; width:6px; height:6px; background:var(--blue); border-radius:50%; animation:pulse 2s infinite; }
+@keyframes pulse { 0%,100%{opacity:1;transform:scale(1);}50%{opacity:0.5;transform:scale(1.3);} }
+h1 { font-family:'Syne',sans-serif; font-size:clamp(38px,6vw,72px); font-weight:800; line-height:1.05; letter-spacing:-2px; margin-bottom:20px; animation:fadeDown 0.6s ease 0.1s both; }
+h1 .accent { color:var(--blue); }
+.hero-sub { color:var(--text2); font-size:16px; line-height:1.7; max-width:520px; margin:0 auto 40px; animation:fadeDown 0.6s ease 0.2s both; }
+@keyframes fadeDown { from{opacity:0;transform:translateY(-16px);}to{opacity:1;transform:translateY(0);} }
 
-  /* ─── HERO ─── */
-  .hero { text-align:center; padding:80px 40px 60px; max-width:800px; margin:0 auto; }
-  .hero-badge {
-    display:inline-flex; align-items:center; gap:8px;
-    background:rgba(59,130,246,0.1); border:1px solid rgba(59,130,246,0.2);
-    color:var(--blue2); padding:6px 16px; border-radius:99px;
-    font-size:12px; letter-spacing:0.1em; text-transform:uppercase;
-    margin-bottom:32px; animation:fadeDown 0.6s ease both;
-  }
-  .hero-badge::before { content:''; width:6px; height:6px; background:var(--blue); border-radius:50%; animation:pulse 2s infinite; }
-  @keyframes pulse { 0%,100%{opacity:1;transform:scale(1);}50%{opacity:0.5;transform:scale(1.3);} }
-  h1 { font-family:'Syne',sans-serif; font-size:clamp(38px,6vw,72px); font-weight:800; line-height:1.05; letter-spacing:-2px; margin-bottom:20px; animation:fadeDown 0.6s ease 0.1s both; }
-  h1 .accent { color:var(--blue); }
-  .hero-sub { color:var(--text2); font-size:16px; line-height:1.7; max-width:520px; margin:0 auto 40px; animation:fadeDown 0.6s ease 0.2s both; }
-  @keyframes fadeDown { from{opacity:0;transform:translateY(-16px);}to{opacity:1;transform:translateY(0);} }
+/* FEATURES STRIP */
+.features-strip { border-top:1px solid var(--border); border-bottom:1px solid var(--border); padding:20px 40px; display:flex; align-items:center; justify-content:center; gap:48px; overflow-x:auto; }
+.strip-item { display:flex; align-items:center; gap:10px; white-space:nowrap; }
+.strip-icon { width:32px; height:32px; background:rgba(59,130,246,0.1); border:1px solid rgba(59,130,246,0.2); border-radius:8px; display:flex; align-items:center; justify-content:center; font-size:14px; flex-shrink:0; }
+.strip-text { font-size:13px; color:var(--text2); }
+.strip-text strong { display:block; color:var(--text); font-size:13px; }
 
-  /* ─── FEATURES STRIP ─── */
-  .features-strip {
-    border-top:1px solid var(--border); border-bottom:1px solid var(--border);
-    padding:20px 40px; display:flex; align-items:center; justify-content:center; gap:48px; overflow-x:auto;
-  }
-  .strip-item { display:flex; align-items:center; gap:10px; white-space:nowrap; }
-  .strip-icon { width:32px; height:32px; background:rgba(59,130,246,0.1); border:1px solid rgba(59,130,246,0.2); border-radius:8px; display:flex; align-items:center; justify-content:center; font-size:14px; flex-shrink:0; }
-  .strip-text { font-size:13px; color:var(--text2); }
-  .strip-text strong { display:block; color:var(--text); font-size:13px; }
+/* APP GRID */
+.app-container { max-width:1100px; margin:0 auto; padding:32px 40px 80px; display:grid; grid-template-columns:1fr 380px; gap:24px; animation:fadeUp 0.6s ease 0.3s both; }
+@keyframes fadeUp { from{opacity:0;transform:translateY(20px);}to{opacity:1;transform:translateY(0);} }
+.panel { background:var(--bg2); border:1px solid var(--border); border-radius:16px; padding:28px; }
+.panel-title { font-family:'Syne',sans-serif; font-size:13px; font-weight:700; letter-spacing:0.15em; text-transform:uppercase; color:var(--text2); margin-bottom:24px; display:flex; align-items:center; gap:8px; }
+.panel-title::before { content:''; width:3px; height:14px; background:var(--blue); border-radius:2px; }
 
-  /* ─── APP GRID ─── */
-  .app-container {
-    max-width:1100px; margin:0 auto; padding:32px 40px 80px;
-    display:grid; grid-template-columns:1fr 380px; gap:24px;
-    animation:fadeUp 0.6s ease 0.3s both;
-  }
-  @keyframes fadeUp { from{opacity:0;transform:translateY(20px);}to{opacity:1;transform:translateY(0);} }
+/* TABS */
+.tabs { display:flex; gap:4px; background:var(--bg); border:1px solid var(--border); border-radius:10px; padding:4px; margin-bottom:24px; }
+.tab { flex:1; padding:9px; border:none; border-radius:7px; background:transparent; color:var(--text2); font-family:'DM Mono',monospace; font-size:12px; cursor:pointer; transition:all 0.2s; letter-spacing:0.05em; }
+.tab.active { background:var(--bg4); color:var(--text); border:1px solid var(--border2); }
+.qr-panel { display:none; }
+.qr-panel.active { display:block; }
 
-  .panel { background:var(--bg2); border:1px solid var(--border); border-radius:16px; padding:28px; }
-  .panel-title { font-family:'Syne',sans-serif; font-size:13px; font-weight:700; letter-spacing:0.15em; text-transform:uppercase; color:var(--text2); margin-bottom:24px; display:flex; align-items:center; gap:8px; }
-  .panel-title::before { content:''; width:3px; height:14px; background:var(--blue); border-radius:2px; }
+/* INPUTS */
+.input-group { margin-bottom:20px; }
+.input-label { display:block; font-size:12px; color:var(--text2); letter-spacing:0.08em; text-transform:uppercase; margin-bottom:8px; }
+.input-field { width:100%; background:var(--bg); border:1px solid var(--border); border-radius:10px; padding:14px 16px; color:var(--text); font-family:'DM Mono',monospace; font-size:14px; outline:none; transition:border-color 0.2s; resize:vertical; }
+.input-field:focus { border-color:var(--blue); box-shadow:0 0 0 3px rgba(59,130,246,0.1); }
+.input-field::placeholder { color:var(--text3); }
 
-  /* ─── TABS ─── */
-  .tabs { display:flex; gap:4px; background:var(--bg); border:1px solid var(--border); border-radius:10px; padding:4px; margin-bottom:24px; }
-  .tab { flex:1; padding:9px; border:none; border-radius:7px; background:transparent; color:var(--text2); font-family:'DM Mono',monospace; font-size:12px; cursor:pointer; transition:all 0.2s; letter-spacing:0.05em; }
-  .tab.active { background:var(--bg4); color:var(--text); border:1px solid var(--border2); }
-  .qr-panel { display:none; }
-  .qr-panel.active { display:block; }
+/* COLORS */
+.options-grid { display:grid; grid-template-columns:1fr 1fr; gap:12px; margin-bottom:20px; }
+.option-card { background:var(--bg); border:1px solid var(--border); border-radius:10px; padding:14px; position:relative; }
+.option-card.pro-locked { opacity:0.6; cursor:pointer; }
+.option-card .option-label { font-size:11px; color:var(--text2); letter-spacing:0.08em; text-transform:uppercase; margin-bottom:8px; }
+.pro-tag { position:absolute; top:10px; right:10px; background:rgba(245,158,11,0.15); border:1px solid rgba(245,158,11,0.3); color:var(--pro); font-size:9px; letter-spacing:0.1em; text-transform:uppercase; padding:2px 6px; border-radius:4px; }
+.color-row { display:flex; gap:8px; align-items:center; }
+.color-swatch { width:28px; height:28px; border-radius:6px; border:2px solid var(--border2); cursor:pointer; transition:transform 0.15s; flex-shrink:0; }
+.color-swatch:hover { transform:scale(1.1); }
+.color-swatch.selected { border-color:var(--blue); }
+.color-input { width:40px; height:28px; border:1px solid var(--border); border-radius:6px; background:var(--bg3); cursor:pointer; padding:2px; }
 
-  /* ─── INPUTS ─── */
-  .input-group { margin-bottom:20px; }
-  .input-label { display:block; font-size:12px; color:var(--text2); letter-spacing:0.08em; text-transform:uppercase; margin-bottom:8px; }
-  .input-field { width:100%; background:var(--bg); border:1px solid var(--border); border-radius:10px; padding:14px 16px; color:var(--text); font-family:'DM Mono',monospace; font-size:14px; outline:none; transition:border-color 0.2s; resize:vertical; }
-  .input-field:focus { border-color:var(--blue); box-shadow:0 0 0 3px rgba(59,130,246,0.1); }
-  .input-field::placeholder { color:var(--text3); }
+/* SLIDER */
+.slider-row { display:flex; align-items:center; gap:12px; }
+input[type="range"] { flex:1; -webkit-appearance:none; height:4px; background:var(--border2); border-radius:2px; outline:none; }
+input[type="range"]::-webkit-slider-thumb { -webkit-appearance:none; width:16px; height:16px; background:var(--blue); border-radius:50%; cursor:pointer; }
+.slider-val { font-size:12px; color:var(--text2); min-width:44px; text-align:right; }
 
-  /* ─── COLORS ─── */
-  .options-grid { display:grid; grid-template-columns:1fr 1fr; gap:12px; margin-bottom:20px; }
-  .option-card { background:var(--bg); border:1px solid var(--border); border-radius:10px; padding:14px; position:relative; }
-  .option-card.pro-locked { opacity:0.6; cursor:pointer; }
-  .option-card .option-label { font-size:11px; color:var(--text2); letter-spacing:0.08em; text-transform:uppercase; margin-bottom:8px; }
-  .pro-tag { position:absolute; top:10px; right:10px; background:rgba(245,158,11,0.15); border:1px solid rgba(245,158,11,0.3); color:var(--pro); font-size:9px; letter-spacing:0.1em; text-transform:uppercase; padding:2px 6px; border-radius:4px; }
-  .color-row { display:flex; gap:8px; align-items:center; }
-  .color-swatch { width:28px; height:28px; border-radius:6px; border:2px solid var(--border2); cursor:pointer; transition:transform 0.15s; flex-shrink:0; }
-  .color-swatch:hover { transform:scale(1.1); }
-  .color-swatch.selected { border-color:var(--blue); }
-  .color-input { width:40px; height:28px; border:1px solid var(--border); border-radius:6px; background:var(--bg3); cursor:pointer; padding:2px; }
+/* GENERATE BUTTON */
+.btn-generate { width:100%; background:var(--blue); color:white; border:none; padding:16px; border-radius:10px; font-family:'Syne',sans-serif; font-size:16px; font-weight:700; cursor:pointer; letter-spacing:0.05em; transition:all 0.2s; position:relative; overflow:hidden; margin-top:8px; }
+.btn-generate::before { content:''; position:absolute; inset:0; background:linear-gradient(135deg,rgba(255,255,255,0.1) 0%,transparent 50%); }
+.btn-generate:hover { background:var(--blue2); transform:translateY(-2px); box-shadow:0 8px 24px rgba(59,130,246,0.3); }
+.btn-generate:active { transform:translateY(0); }
 
-  /* ─── SLIDER ─── */
-  .slider-row { display:flex; align-items:center; gap:12px; }
-  input[type="range"] { flex:1; -webkit-appearance:none; height:4px; background:var(--border2); border-radius:2px; outline:none; }
-  input[type="range"]::-webkit-slider-thumb { -webkit-appearance:none; width:16px; height:16px; background:var(--blue); border-radius:50%; cursor:pointer; }
-  .slider-val { font-size:12px; color:var(--text2); min-width:44px; text-align:right; }
+/* PREVIEW */
+.preview-panel { display:flex; flex-direction:column; gap:20px; }
+.qr-display { background:var(--bg); border:1px solid var(--border); border-radius:16px; padding:32px; display:flex; flex-direction:column; align-items:center; justify-content:center; min-height:300px; position:relative; overflow:hidden; }
+.qr-display::before { content:''; position:absolute; top:0; left:0; right:0; height:1px; background:linear-gradient(90deg,transparent,var(--blue),transparent); }
+.qr-placeholder { display:flex; flex-direction:column; align-items:center; gap:16px; color:var(--text3); }
+.qr-placeholder svg { width:80px; height:80px; opacity:0.3; }
+.qr-placeholder p { font-size:13px; text-align:center; line-height:1.6; }
+#qr-output { display:none; flex-direction:column; align-items:center; gap:16px; }
+#qr-output.visible { display:flex; }
+#qr-code-container { background:white; padding:16px; border-radius:12px; box-shadow:0 0 40px rgba(59,130,246,0.2); max-width:100%; overflow:hidden; }
+#qr-code-container canvas, #qr-code-container img { display:block; border-radius:4px; max-width:100%; height:auto; }
+.qr-meta { text-align:center; }
+.qr-size-label { font-size:11px; color:var(--text3); letter-spacing:0.1em; text-transform:uppercase; }
+.watermark { font-size:10px; color:var(--text3); letter-spacing:0.15em; text-transform:uppercase; margin-top:4px; }
 
-  /* ─── GENERATE BUTTON ─── */
-  .btn-generate { width:100%; background:var(--blue); color:white; border:none; padding:16px; border-radius:10px; font-family:'Syne',sans-serif; font-size:16px; font-weight:700; cursor:pointer; letter-spacing:0.05em; transition:all 0.2s; position:relative; overflow:hidden; margin-top:8px; }
-  .btn-generate::before { content:''; position:absolute; inset:0; background:linear-gradient(135deg,rgba(255,255,255,0.1) 0%,transparent 50%); }
-  .btn-generate:hover { background:var(--blue2); transform:translateY(-2px); box-shadow:0 8px 24px rgba(59,130,246,0.3); }
-  .btn-generate:active { transform:translateY(0); }
+/* DOWNLOAD */
+.download-row { display:grid; grid-template-columns:1fr 1fr; gap:10px; margin-top:16px; }
+.btn-download { background:var(--bg3); border:1px solid var(--border2); color:var(--text); padding:11px; border-radius:8px; font-family:'DM Mono',monospace; font-size:12px; cursor:pointer; transition:all 0.2s; letter-spacing:0.05em; display:flex; align-items:center; justify-content:center; gap:6px; }
+.btn-download:hover { background:var(--bg4); border-color:var(--blue); color:var(--blue2); }
+.btn-download.pro-btn { opacity:0.55; }
 
-  /* ─── PREVIEW ─── */
-  .preview-panel { display:flex; flex-direction:column; gap:20px; }
-  .qr-display { background:var(--bg); border:1px solid var(--border); border-radius:16px; padding:32px; display:flex; flex-direction:column; align-items:center; justify-content:center; min-height:300px; position:relative; overflow:hidden; }
-  .qr-display::before { content:''; position:absolute; top:0; left:0; right:0; height:1px; background:linear-gradient(90deg,transparent,var(--blue),transparent); }
-  .qr-placeholder { display:flex; flex-direction:column; align-items:center; gap:16px; color:var(--text3); }
-  .qr-placeholder svg { width:80px; height:80px; opacity:0.3; }
-  .qr-placeholder p { font-size:13px; text-align:center; line-height:1.6; }
-  #qr-output { display:none; flex-direction:column; align-items:center; gap:16px; }
-  #qr-output.visible { display:flex; }
-  #qr-code-container { background:white; padding:16px; border-radius:12px; box-shadow:0 0 40px rgba(59,130,246,0.2); max-width:100%; overflow:hidden; }
-  #qr-code-container canvas, #qr-code-container img { display:block; border-radius:4px; max-width:100%; height:auto; }
-  .qr-meta { text-align:center; }
-  .qr-size-label { font-size:11px; color:var(--text3); letter-spacing:0.1em; text-transform:uppercase; }
-  .watermark { font-size:10px; color:var(--text3); letter-spacing:0.15em; text-transform:uppercase; margin-top:4px; }
+/* STATS */
+.stats-row { display:grid; grid-template-columns:repeat(3,1fr); gap:10px; }
+.stat-card { background:var(--bg); border:1px solid var(--border); border-radius:10px; padding:14px; text-align:center; }
+.stat-num { font-family:'Syne',sans-serif; font-size:22px; font-weight:800; color:var(--blue2); display:block; }
+.stat-label { font-size:10px; color:var(--text3); letter-spacing:0.1em; text-transform:uppercase; margin-top:2px; }
 
-  /* ─── DOWNLOAD BUTTONS ─── */
-  .download-row { display:grid; grid-template-columns:1fr 1fr; gap:10px; margin-top:16px; }
-  .btn-download { background:var(--bg3); border:1px solid var(--border2); color:var(--text); padding:11px; border-radius:8px; font-family:'DM Mono',monospace; font-size:12px; cursor:pointer; transition:all 0.2s; letter-spacing:0.05em; display:flex; align-items:center; justify-content:center; gap:6px; }
-  .btn-download:hover { background:var(--bg4); border-color:var(--blue); color:var(--blue2); }
-  .btn-download.pro-btn { opacity:0.55; }
+/* PRO BANNER */
+.pro-banner { background:linear-gradient(135deg,rgba(245,158,11,0.08) 0%,rgba(59,130,246,0.08) 100%); border:1px solid rgba(245,158,11,0.2); border-radius:12px; padding:20px; text-align:center; }
+.pro-banner h3 { font-family:'Syne',sans-serif; font-size:16px; font-weight:700; color:var(--pro); margin-bottom:6px; }
+.pro-banner p { font-size:12px; color:var(--text2); line-height:1.6; margin-bottom:14px; }
+.btn-pro { background:var(--pro); color:#000; border:none; padding:11px 24px; border-radius:8px; font-family:'Syne',sans-serif; font-size:13px; font-weight:700; cursor:pointer; letter-spacing:0.05em; transition:all 0.2s; width:100%; }
+.btn-pro:hover { background:#fbbf24; transform:translateY(-1px); box-shadow:0 6px 20px rgba(245,158,11,0.3); }
 
-  /* ─── STATS ─── */
-  .stats-row { display:grid; grid-template-columns:repeat(3,1fr); gap:10px; }
-  .stat-card { background:var(--bg); border:1px solid var(--border); border-radius:10px; padding:14px; text-align:center; }
-  .stat-num { font-family:'Syne',sans-serif; font-size:22px; font-weight:800; color:var(--blue2); display:block; }
-  .stat-label { font-size:10px; color:var(--text3); letter-spacing:0.1em; text-transform:uppercase; margin-top:2px; }
+/* PRICING */
+.pricing { max-width:1100px; margin:0 auto; padding:80px 40px; }
+.section-title { font-family:'Syne',sans-serif; font-size:clamp(28px,4vw,48px); font-weight:800; letter-spacing:-1px; text-align:center; margin-bottom:12px; }
+.section-sub { text-align:center; color:var(--text2); font-size:15px; margin-bottom:48px; }
+.pricing-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:20px; }
+.price-card { background:var(--bg2); border:1px solid var(--border); border-radius:16px; padding:32px; position:relative; transition:transform 0.2s,border-color 0.2s; }
+.price-card:hover { transform:translateY(-4px); border-color:var(--border2); }
+.price-card.featured { border-color:var(--blue); background:linear-gradient(135deg,rgba(59,130,246,0.05) 0%,var(--bg2) 100%); }
+.price-card.featured::before { content:'MOST POPULAR'; position:absolute; top:-12px; left:50%; transform:translateX(-50%); background:var(--blue); color:white; font-size:10px; letter-spacing:0.15em; padding:4px 14px; border-radius:99px; font-family:'Syne',sans-serif; font-weight:700; white-space:nowrap; }
+.plan-name { font-family:'Syne',sans-serif; font-size:14px; font-weight:700; letter-spacing:0.1em; text-transform:uppercase; color:var(--text2); margin-bottom:16px; }
+.plan-price { font-family:'Syne',sans-serif; font-size:48px; font-weight:800; letter-spacing:-2px; color:var(--text); line-height:1; margin-bottom:4px; }
+.plan-price sup { font-size:20px; vertical-align:super; letter-spacing:0; }
+.plan-period { font-size:12px; color:var(--text3); letter-spacing:0.05em; margin-bottom:28px; }
+.plan-features { list-style:none; margin-bottom:28px; }
+.plan-features li { font-size:13px; color:var(--text2); padding:8px 0; border-bottom:1px solid var(--border); display:flex; align-items:center; gap:10px; line-height:1.4; }
+.plan-features li:last-child { border-bottom:none; }
+.plan-features li::before { content:'&#10003;'; color:var(--blue); font-size:12px; flex-shrink:0; }
+.plan-features li.locked { opacity:0.35; }
+.plan-features li.locked::before { content:'&#10005;'; color:var(--text3); }
+.btn-plan { width:100%; padding:13px; border-radius:8px; font-family:'Syne',sans-serif; font-size:14px; font-weight:700; cursor:pointer; letter-spacing:0.05em; transition:all 0.2s; border:1px solid var(--border2); background:var(--bg3); color:var(--text); }
+.btn-plan:hover { background:var(--bg4); border-color:var(--blue); }
+.btn-plan.primary { background:var(--blue); border-color:var(--blue); color:white; }
+.btn-plan.primary:hover { background:var(--blue2); box-shadow:0 6px 20px rgba(59,130,246,0.3); transform:translateY(-1px); }
 
-  /* ─── PRO BANNER ─── */
-  .pro-banner { background:linear-gradient(135deg,rgba(245,158,11,0.08) 0%,rgba(59,130,246,0.08) 100%); border:1px solid rgba(245,158,11,0.2); border-radius:12px; padding:20px; text-align:center; }
-  .pro-banner h3 { font-family:'Syne',sans-serif; font-size:16px; font-weight:700; color:var(--pro); margin-bottom:6px; }
-  .pro-banner p { font-size:12px; color:var(--text2); line-height:1.6; margin-bottom:14px; }
-  .btn-pro { background:var(--pro); color:#000; border:none; padding:11px 24px; border-radius:8px; font-family:'Syne',sans-serif; font-size:13px; font-weight:700; cursor:pointer; letter-spacing:0.05em; transition:all 0.2s; width:100%; }
-  .btn-pro:hover { background:#fbbf24; transform:translateY(-1px); box-shadow:0 6px 20px rgba(245,158,11,0.3); }
+/* FOOTER */
+footer { border-top:1px solid var(--border); padding:32px 40px; display:flex; align-items:center; justify-content:space-between; color:var(--text3); font-size:12px; letter-spacing:0.05em; }
+footer a { color:var(--text3); text-decoration:none; transition:color 0.2s; cursor:pointer; }
+footer a:hover { color:var(--text2); }
 
-  /* ─── PRICING ─── */
-  .pricing { max-width:1100px; margin:0 auto; padding:80px 40px; }
-  .section-title { font-family:'Syne',sans-serif; font-size:clamp(28px,4vw,48px); font-weight:800; letter-spacing:-1px; text-align:center; margin-bottom:12px; }
-  .section-sub { text-align:center; color:var(--text2); font-size:15px; margin-bottom:48px; }
-  .pricing-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:20px; }
-  .price-card { background:var(--bg2); border:1px solid var(--border); border-radius:16px; padding:32px; position:relative; transition:transform 0.2s,border-color 0.2s; }
-  .price-card:hover { transform:translateY(-4px); border-color:var(--border2); }
-  .price-card.featured { border-color:var(--blue); background:linear-gradient(135deg,rgba(59,130,246,0.05) 0%,var(--bg2) 100%); }
-  .price-card.featured::before { content:'MOST POPULAR'; position:absolute; top:-12px; left:50%; transform:translateX(-50%); background:var(--blue); color:white; font-size:10px; letter-spacing:0.15em; padding:4px 14px; border-radius:99px; font-family:'Syne',sans-serif; font-weight:700; white-space:nowrap; }
-  .plan-name { font-family:'Syne',sans-serif; font-size:14px; font-weight:700; letter-spacing:0.1em; text-transform:uppercase; color:var(--text2); margin-bottom:16px; }
-  .plan-price { font-family:'Syne',sans-serif; font-size:48px; font-weight:800; letter-spacing:-2px; color:var(--text); line-height:1; margin-bottom:4px; }
-  .plan-price sup { font-size:20px; vertical-align:super; letter-spacing:0; }
-  .plan-period { font-size:12px; color:var(--text3); letter-spacing:0.05em; margin-bottom:28px; }
-  .plan-features { list-style:none; margin-bottom:28px; }
-  .plan-features li { font-size:13px; color:var(--text2); padding:8px 0; border-bottom:1px solid var(--border); display:flex; align-items:center; gap:10px; line-height:1.4; }
-  .plan-features li:last-child { border-bottom:none; }
-  .plan-features li::before { content:'✓'; color:var(--blue); font-size:12px; flex-shrink:0; }
-  .plan-features li.locked { opacity:0.35; }
-  .plan-features li.locked::before { content:'✕'; color:var(--text3); }
-  .btn-plan { width:100%; padding:13px; border-radius:8px; font-family:'Syne',sans-serif; font-size:14px; font-weight:700; cursor:pointer; letter-spacing:0.05em; transition:all 0.2s; border:1px solid var(--border2); background:var(--bg3); color:var(--text); }
-  .btn-plan:hover { background:var(--bg4); border-color:var(--blue); }
-  .btn-plan.primary { background:var(--blue); border-color:var(--blue); color:white; }
-  .btn-plan.primary:hover { background:var(--blue2); box-shadow:0 6px 20px rgba(59,130,246,0.3); transform:translateY(-1px); }
+/* MODAL */
+.modal-overlay { position:fixed; inset:0; background:rgba(0,0,0,0.8); backdrop-filter:blur(8px); z-index:1000; display:none; align-items:center; justify-content:center; padding:20px; }
+.modal-overlay.open { display:flex; }
+.modal { background:var(--bg2); border:1px solid var(--border2); border-radius:20px; padding:40px; max-width:440px; width:100%; position:relative; animation:modalIn 0.3s ease; }
+@keyframes modalIn { from{opacity:0;transform:scale(0.95) translateY(10px);}to{opacity:1;transform:scale(1) translateY(0);} }
+.modal-close { position:absolute; top:16px; right:16px; background:var(--bg3); border:1px solid var(--border); color:var(--text2); width:32px; height:32px; border-radius:8px; cursor:pointer; font-size:16px; display:flex; align-items:center; justify-content:center; transition:all 0.2s; }
+.modal-close:hover { color:var(--text); background:var(--bg4); }
+.modal h2 { font-family:'Syne',sans-serif; font-size:24px; font-weight:800; margin-bottom:8px; }
+.modal p { color:var(--text2); font-size:14px; line-height:1.6; margin-bottom:24px; }
+.modal-features { list-style:none; margin-bottom:28px; }
+.modal-features li { font-size:13px; color:var(--text2); padding:6px 0; display:flex; align-items:center; gap:10px; }
+.modal-features li::before { content:'&#10003;'; color:var(--success); font-weight:700; }
+.modal-price { text-align:center; margin-bottom:20px; }
+.modal-price .price-big { font-family:'Syne',sans-serif; font-size:48px; font-weight:800; color:var(--text); letter-spacing:-2px; }
+.modal-price .price-period { font-size:13px; color:var(--text3); }
 
-  /* ─── FOOTER ─── */
-  footer { border-top:1px solid var(--border); padding:32px 40px; display:flex; align-items:center; justify-content:space-between; color:var(--text3); font-size:12px; letter-spacing:0.05em; }
-  footer a { color:var(--text3); text-decoration:none; transition:color 0.2s; cursor:pointer; }
-  footer a:hover { color:var(--text2); }
+/* TOAST */
+.toast { position:fixed; bottom:24px; right:24px; background:var(--bg3); border:1px solid var(--success); color:var(--success); padding:12px 20px; border-radius:10px; font-size:13px; z-index:2000; transform:translateY(100px); opacity:0; transition:all 0.3s; }
+.toast.show { transform:translateY(0); opacity:1; }
 
-  /* ─── MODAL ─── */
-  .modal-overlay { position:fixed; inset:0; background:rgba(0,0,0,0.8); backdrop-filter:blur(8px); z-index:1000; display:none; align-items:center; justify-content:center; padding:20px; }
-  .modal-overlay.open { display:flex; }
-  .modal { background:var(--bg2); border:1px solid var(--border2); border-radius:20px; padding:40px; max-width:440px; width:100%; position:relative; animation:modalIn 0.3s ease; }
-  @keyframes modalIn { from{opacity:0;transform:scale(0.95) translateY(10px);}to{opacity:1;transform:scale(1) translateY(0);} }
-  .modal-close { position:absolute; top:16px; right:16px; background:var(--bg3); border:1px solid var(--border); color:var(--text2); width:32px; height:32px; border-radius:8px; cursor:pointer; font-size:16px; display:flex; align-items:center; justify-content:center; transition:all 0.2s; }
-  .modal-close:hover { color:var(--text); background:var(--bg4); }
-  .modal h2 { font-family:'Syne',sans-serif; font-size:24px; font-weight:800; margin-bottom:8px; }
-  .modal p { color:var(--text2); font-size:14px; line-height:1.6; margin-bottom:24px; }
-  .modal-features { list-style:none; margin-bottom:28px; }
-  .modal-features li { font-size:13px; color:var(--text2); padding:6px 0; display:flex; align-items:center; gap:10px; }
-  .modal-features li::before { content:'✓'; color:var(--success); font-weight:700; }
-  .modal-price { text-align:center; margin-bottom:20px; }
-  .modal-price .price-big { font-family:'Syne',sans-serif; font-size:48px; font-weight:800; color:var(--text); letter-spacing:-2px; }
-  .modal-price .price-period { font-size:13px; color:var(--text3); }
+/* SUBPAGES */
+.sub-container { max-width:720px; margin:0 auto; padding:60px 40px 80px; position:relative; z-index:1; }
+.sub-container h1 { font-family:'Syne',sans-serif; font-size:clamp(28px,5vw,42px); font-weight:800; letter-spacing:-1px; margin-bottom:8px; }
+.sub-date { font-size:12px; color:var(--text3); letter-spacing:0.1em; margin-bottom:48px; }
+.sub-container h2 { font-family:'Syne',sans-serif; font-size:17px; font-weight:700; color:var(--text); margin:36px 0 12px; padding-left:12px; border-left:3px solid var(--blue); }
+.sub-container p { font-size:14px; color:var(--text2); line-height:1.8; margin-bottom:14px; }
+.sub-container ul { padding-left:20px; margin-bottom:14px; }
+.sub-container ul li { font-size:14px; color:var(--text2); line-height:1.8; margin-bottom:6px; }
+.sub-container a { color:var(--blue2); text-decoration:none; }
+.sub-container a:hover { text-decoration:underline; }
+.sub-divider { border:none; border-top:1px solid var(--border); margin:40px 0; }
+.contact-cards { display:grid; grid-template-columns:1fr 1fr; gap:16px; margin-bottom:48px; }
+.contact-card { background:var(--bg2); border:1px solid var(--border); border-radius:14px; padding:24px; transition:border-color 0.2s; }
+.contact-card:hover { border-color:var(--blue); }
+.contact-card .card-icon { font-size:22px; margin-bottom:10px; display:block; }
+.contact-card .card-title { font-family:'Syne',sans-serif; font-size:14px; font-weight:700; color:var(--text); margin-bottom:6px; }
+.contact-card .card-desc { font-size:12px; color:var(--text2); line-height:1.5; margin-bottom:10px; }
+.contact-card a { font-size:12px; color:var(--blue2); text-decoration:none; }
+.contact-card a:hover { text-decoration:underline; }
+.faq-title { font-family:'Syne',sans-serif; font-size:18px; font-weight:700; margin-bottom:24px; }
+.faq-item { border-bottom:1px solid var(--border); padding:18px 0; }
+.faq-q { font-size:14px; color:var(--text); margin-bottom:8px; font-weight:500; }
+.faq-a { font-size:13px; color:var(--text2); line-height:1.7; }
+.faq-a a { color:var(--blue2); }
 
-  /* ─── TOAST ─── */
-  .toast { position:fixed; bottom:24px; right:24px; background:var(--bg3); border:1px solid var(--success); color:var(--success); padding:12px 20px; border-radius:10px; font-size:13px; z-index:2000; transform:translateY(100px); opacity:0; transition:all 0.3s; }
-  .toast.show { transform:translateY(0); opacity:1; }
-
-  /* ─── SUBPAGES ─── */
-  .sub-container { max-width:720px; margin:0 auto; padding:60px 40px 80px; position:relative; z-index:1; }
-  .sub-container h1 { font-family:'Syne',sans-serif; font-size:clamp(28px,5vw,42px); font-weight:800; letter-spacing:-1px; margin-bottom:8px; }
-  .sub-date { font-size:12px; color:var(--text3); letter-spacing:0.1em; margin-bottom:48px; }
-  .sub-container h2 { font-family:'Syne',sans-serif; font-size:17px; font-weight:700; color:var(--text); margin:36px 0 12px; padding-left:12px; border-left:3px solid var(--blue); }
-  .sub-container p { font-size:14px; color:var(--text2); line-height:1.8; margin-bottom:14px; }
-  .sub-container ul { padding-left:20px; margin-bottom:14px; }
-  .sub-container ul li { font-size:14px; color:var(--text2); line-height:1.8; margin-bottom:6px; }
-  .sub-container a { color:var(--blue2); text-decoration:none; }
-  .sub-container a:hover { text-decoration:underline; }
-  .sub-divider { border:none; border-top:1px solid var(--border); margin:40px 0; }
-
-  /* Contact page cards */
-  .contact-cards { display:grid; grid-template-columns:1fr 1fr; gap:16px; margin-bottom:48px; }
-  .contact-card { background:var(--bg2); border:1px solid var(--border); border-radius:14px; padding:24px; }
-  .contact-card:hover { border-color:var(--blue); }
-  .contact-card .card-icon { font-size:22px; margin-bottom:10px; display:block; }
-  .contact-card .card-title { font-family:'Syne',sans-serif; font-size:14px; font-weight:700; color:var(--text); margin-bottom:6px; }
-  .contact-card .card-desc { font-size:12px; color:var(--text2); line-height:1.5; margin-bottom:10px; }
-  .contact-card a { font-size:12px; color:var(--blue2); text-decoration:none; }
-  .contact-card a:hover { text-decoration:underline; }
-  .faq-title { font-family:'Syne',sans-serif; font-size:18px; font-weight:700; margin-bottom:24px; }
-  .faq-item { border-bottom:1px solid var(--border); padding:18px 0; }
-  .faq-q { font-size:14px; color:var(--text); margin-bottom:8px; font-weight:500; }
-  .faq-a { font-size:13px; color:var(--text2); line-height:1.7; }
-  .faq-a a { color:var(--blue2); }
-
-  /* ─── RESPONSIVE ─── */
-  @media(max-width:768px) {
-    nav { padding:12px 16px; }
-    .nav-right { gap:12px; margin-left:12px; }
-    .nav-link { display:none; }
-    .hero { padding:40px 16px 30px; }
-    h1 { font-size:clamp(30px,9vw,42px); letter-spacing:-1px; }
-    .app-container { grid-template-columns:1fr; padding:16px 16px 60px; gap:16px; }
-    .tabs { flex-wrap:wrap; }
-    .tab { font-size:11px; padding:8px 4px; }
-    .options-grid { grid-template-columns:1fr; }
-    .pricing { padding:40px 16px; }
-    .pricing-grid { grid-template-columns:1fr; gap:16px; }
-    .features-strip { gap:16px; padding:16px; justify-content:flex-start; }
-    .stats-row { gap:8px; }
-    .stat-num { font-size:18px; }
-    footer { flex-direction:column; gap:12px; text-align:center; padding:24px 16px; }
-    .modal { padding:24px 20px; }
-    .plan-price { font-size:38px; }
-    .sub-container { padding:40px 20px 60px; }
-    .contact-cards { grid-template-columns:1fr; }
-  }
+/* RESPONSIVE */
+@media(max-width:768px) {
+  nav { padding:12px 16px; }
+  .nav-right { gap:12px; margin-left:12px; }
+  .nav-link { display:none; }
+  .hero { padding:40px 16px 30px; }
+  h1 { font-size:clamp(30px,9vw,42px); letter-spacing:-1px; }
+  .app-container { grid-template-columns:1fr; padding:16px 16px 60px; gap:16px; }
+  .tabs { flex-wrap:wrap; }
+  .tab { font-size:11px; padding:8px 4px; }
+  .options-grid { grid-template-columns:1fr; }
+  .pricing { padding:40px 16px; }
+  .pricing-grid { grid-template-columns:1fr; gap:16px; }
+  .features-strip { gap:16px; padding:16px; justify-content:flex-start; }
+  .stats-row { gap:8px; }
+  .stat-num { font-size:18px; }
+  footer { flex-direction:column; gap:12px; text-align:center; padding:24px 16px; }
+  .modal { padding:24px 20px; }
+  .plan-price { font-size:38px; }
+  .sub-container { padding:40px 20px 60px; }
+  .contact-cards { grid-template-columns:1fr; }
+}
 </style>
 </head>
 <body>
 <div class="wrapper">
 
-<!-- ═══════════════════════════════════════════════
-     NAV (shared across all pages)
-════════════════════════════════════════════════ -->
+<!-- NAV -->
 <nav>
   <div class="logo" onclick="showPage('home')">
     <div class="logo-icon">
       <svg viewBox="0 0 36 36" fill="none">
-        <rect x="2"  y="2"  width="12" height="12" rx="2" fill="#3b82f6"/>
-        <rect x="4"  y="4"  width="8"  height="8"  rx="1" fill="#080a0f"/>
-        <rect x="6"  y="6"  width="4"  height="4"  rx="0.5" fill="#3b82f6"/>
-        <rect x="22" y="2"  width="12" height="12" rx="2" fill="#3b82f6"/>
-        <rect x="24" y="4"  width="8"  height="8"  rx="1" fill="#080a0f"/>
-        <rect x="26" y="6"  width="4"  height="4"  rx="0.5" fill="#3b82f6"/>
-        <rect x="2"  y="22" width="12" height="12" rx="2" fill="#3b82f6"/>
-        <rect x="4"  y="24" width="8"  height="8"  rx="1" fill="#080a0f"/>
-        <rect x="6"  y="26" width="4"  height="4"  rx="0.5" fill="#3b82f6"/>
-        <rect x="17" y="2"  width="3"  height="3"  rx="0.5" fill="#3b82f6" opacity="0.6"/>
-        <rect x="22" y="17" width="3"  height="3"  rx="0.5" fill="#3b82f6" opacity="0.6"/>
-        <rect x="17" y="17" width="3"  height="3"  rx="0.5" fill="#60a5fa"/>
-        <rect x="27" y="17" width="3"  height="3"  rx="0.5" fill="#3b82f6" opacity="0.4"/>
-        <rect x="17" y="22" width="3"  height="3"  rx="0.5" fill="#3b82f6" opacity="0.6"/>
-        <rect x="17" y="27" width="3"  height="3"  rx="0.5" fill="#3b82f6" opacity="0.4"/>
-        <rect x="22" y="22" width="3"  height="3"  rx="0.5" fill="#3b82f6" opacity="0.8"/>
-        <rect x="27" y="27" width="3"  height="3"  rx="0.5" fill="#60a5fa"/>
-        <rect x="32" y="22" width="2"  height="2"  rx="0.3" fill="#3b82f6" opacity="0.5"/>
+        <rect x="2" y="2" width="12" height="12" rx="2" fill="#3b82f6"/>
+        <rect x="4" y="4" width="8" height="8" rx="1" fill="#080a0f"/>
+        <rect x="6" y="6" width="4" height="4" rx="0.5" fill="#3b82f6"/>
+        <rect x="22" y="2" width="12" height="12" rx="2" fill="#3b82f6"/>
+        <rect x="24" y="4" width="8" height="8" rx="1" fill="#080a0f"/>
+        <rect x="26" y="6" width="4" height="4" rx="0.5" fill="#3b82f6"/>
+        <rect x="2" y="22" width="12" height="12" rx="2" fill="#3b82f6"/>
+        <rect x="4" y="24" width="8" height="8" rx="1" fill="#080a0f"/>
+        <rect x="6" y="26" width="4" height="4" rx="0.5" fill="#3b82f6"/>
+        <rect x="17" y="2" width="3" height="3" rx="0.5" fill="#3b82f6" opacity="0.6"/>
+        <rect x="22" y="17" width="3" height="3" rx="0.5" fill="#3b82f6" opacity="0.6"/>
+        <rect x="17" y="17" width="3" height="3" rx="0.5" fill="#60a5fa"/>
+        <rect x="27" y="17" width="3" height="3" rx="0.5" fill="#3b82f6" opacity="0.4"/>
+        <rect x="17" y="22" width="3" height="3" rx="0.5" fill="#3b82f6" opacity="0.6"/>
+        <rect x="17" y="27" width="3" height="3" rx="0.5" fill="#3b82f6" opacity="0.4"/>
+        <rect x="22" y="22" width="3" height="3" rx="0.5" fill="#3b82f6" opacity="0.8"/>
+        <rect x="27" y="27" width="3" height="3" rx="0.5" fill="#60a5fa"/>
+        <rect x="32" y="22" width="2" height="2" rx="0.3" fill="#3b82f6" opacity="0.5"/>
       </svg>
     </div>
     <span class="logo-text">QR<span>exact</span></span>
   </div>
   <div class="nav-right">
-    <span class="nav-link" onclick="showPage('home'); setTimeout(function(){document.getElementById('pricing').scrollIntoView({behavior:'smooth'});},50)">Pricing</span>
+    <span class="nav-link" onclick="showPage('home');setTimeout(function(){document.getElementById('pricing').scrollIntoView({behavior:'smooth'});},50)">Pricing</span>
     <span class="nav-link" onclick="openModal('pro')">Sign In</span>
     <button class="btn-nav" onclick="document.getElementById('builder').scrollIntoView({behavior:'smooth',block:'start'})">Start Free</button>
   </div>
 </nav>
 
-<!-- ═══════════════════════════════════════════════
-     PAGE: HOME / MAIN APP
-════════════════════════════════════════════════ -->
+<!-- ══ PAGE: HOME ══ -->
 <div id="page-home" class="page active">
 
   <div class="hero">
@@ -325,14 +317,13 @@
   </div>
 
   <div class="features-strip">
-    <div class="strip-item"><div class="strip-icon">⚡</div><div class="strip-text"><strong>Instant</strong>Generate in seconds</div></div>
-    <div class="strip-item"><div class="strip-icon">🎨</div><div class="strip-text"><strong>Custom Colors</strong>Match your brand</div></div>
-    <div class="strip-item"><div class="strip-icon">📊</div><div class="strip-text"><strong>Analytics</strong>Track every scan</div></div>
-    <div class="strip-item"><div class="strip-icon">♾️</div><div class="strip-text"><strong>Unlimited</strong>On Pro plan</div></div>
+    <div class="strip-item"><div class="strip-icon">&#9889;</div><div class="strip-text"><strong>Instant</strong>Generate in seconds</div></div>
+    <div class="strip-item"><div class="strip-icon">&#127912;</div><div class="strip-text"><strong>Custom Colors</strong>Match your brand</div></div>
+    <div class="strip-item"><div class="strip-icon">&#128202;</div><div class="strip-text"><strong>Analytics</strong>Track every scan</div></div>
+    <div class="strip-item"><div class="strip-icon">&#9854;</div><div class="strip-text"><strong>Unlimited</strong>On Pro plan</div></div>
   </div>
 
   <div class="app-container" id="builder">
-
     <!-- LEFT: BUILDER -->
     <div class="panel">
       <div class="panel-title">QR Builder</div>
@@ -416,13 +407,13 @@
       <div class="input-group">
         <label class="input-label">Error Correction</label>
         <select id="error-level" class="input-field" style="cursor:pointer">
-          <option value="L">Low — smaller file size</option>
-          <option value="M" selected>Medium — recommended</option>
-          <option value="H">High — best for logos (PRO)</option>
+          <option value="L">Low &mdash; smaller file size</option>
+          <option value="M" selected>Medium &mdash; recommended</option>
+          <option value="H">High &mdash; best for logos (PRO)</option>
         </select>
       </div>
 
-      <button class="btn-generate" onclick="generateQR()">⚡ Generate QR Code</button>
+      <button class="btn-generate" onclick="generateQR()">&#9889; Generate QR Code</button>
     </div>
 
     <!-- RIGHT: PREVIEW -->
@@ -432,11 +423,11 @@
         <div class="qr-display">
           <div class="qr-placeholder" id="qr-placeholder">
             <svg viewBox="0 0 80 80" fill="none">
-              <rect x="4"  y="4"  width="28" height="28" rx="4" stroke="#4a5568" stroke-width="3"/>
+              <rect x="4" y="4" width="28" height="28" rx="4" stroke="#4a5568" stroke-width="3"/>
               <rect x="10" y="10" width="16" height="16" rx="2" fill="#4a5568" opacity="0.4"/>
-              <rect x="48" y="4"  width="28" height="28" rx="4" stroke="#4a5568" stroke-width="3"/>
+              <rect x="48" y="4" width="28" height="28" rx="4" stroke="#4a5568" stroke-width="3"/>
               <rect x="54" y="10" width="16" height="16" rx="2" fill="#4a5568" opacity="0.4"/>
-              <rect x="4"  y="48" width="28" height="28" rx="4" stroke="#4a5568" stroke-width="3"/>
+              <rect x="4" y="48" width="28" height="28" rx="4" stroke="#4a5568" stroke-width="3"/>
               <rect x="10" y="54" width="16" height="16" rx="2" fill="#4a5568" opacity="0.4"/>
               <rect x="48" y="48" width="8" height="8" rx="1" fill="#4a5568" opacity="0.3"/>
               <rect x="60" y="48" width="8" height="8" rx="1" fill="#4a5568" opacity="0.3"/>
@@ -449,14 +440,14 @@
           <div id="qr-output">
             <div id="qr-code-container"></div>
             <div class="qr-meta">
-              <div class="qr-size-label" id="qr-size-display">200 × 200px</div>
+              <div class="qr-size-label" id="qr-size-display">200 &times; 200px</div>
               <div class="watermark">QRexact.com</div>
             </div>
           </div>
         </div>
         <div class="download-row">
-          <button class="btn-download" onclick="downloadPNG()">⬇ PNG</button>
-          <button class="btn-download pro-btn" onclick="openModal('pro')">⬇ SVG <span style="font-size:9px;color:var(--pro);margin-left:4px">PRO</span></button>
+          <button class="btn-download" onclick="downloadPNG()">&#8659; PNG</button>
+          <button class="btn-download pro-btn" onclick="openModal('pro')">&#8659; SVG <span style="font-size:9px;color:var(--pro);margin-left:4px">PRO</span></button>
         </div>
       </div>
 
@@ -472,7 +463,7 @@
       <div class="pro-banner">
         <h3>Upgrade to Pro</h3>
         <p>Unlimited QR codes, custom colors, logo embedding, scan analytics and SVG downloads.</p>
-        <button class="btn-pro" onclick="openModal('pro')">Get Pro — $6.99/mo</button>
+        <button class="btn-pro" onclick="openModal('pro')">Get Pro &mdash; $6.99/mo</button>
       </div>
     </div>
   </div>
@@ -496,7 +487,7 @@
           <li class="locked">Scan analytics</li>
           <li class="locked">SVG &amp; PDF download</li>
         </ul>
-        <button class="btn-plan" onclick="generateQR()">Start Free</button>
+        <button class="btn-plan" onclick="document.getElementById('builder').scrollIntoView({behavior:'smooth',block:'start'})">Start Free</button>
       </div>
       <div class="price-card featured">
         <div class="plan-name">Pro</div>
@@ -534,36 +525,31 @@
   </div>
 
   <footer>
-    <span>© 2026 QRexact — Create QR Codes Instantly</span>
+    <span>&copy; 2026 QRexact &mdash; Create QR Codes Instantly</span>
     <span style="color:var(--blue2)">QRexact.com</span>
     <span>
-      <a onclick="showPage('privacy')">Privacy</a> ·
-      <a onclick="showPage('terms')">Terms</a> ·
+      <a onclick="showPage('privacy')">Privacy</a> &middot;
+      <a onclick="showPage('terms')">Terms</a> &middot;
       <a onclick="showPage('contact')">Contact</a>
     </span>
   </footer>
 </div>
 
-<!-- ═══════════════════════════════════════════════
-     PAGE: PRIVACY
-════════════════════════════════════════════════ -->
+<!-- ══ PAGE: PRIVACY ══ -->
 <div id="page-privacy" class="page">
   <div class="sub-container">
     <h1>Privacy Policy</h1>
     <p class="sub-date">Last updated: March 2026</p>
-    <p>QRexact ("we", "our", or "us") is committed to protecting your privacy. This Privacy Policy explains how we collect, use, and safeguard your information when you use QRexact.com.</p>
-
+    <p>QRexact is committed to protecting your privacy. This Privacy Policy explains how we collect, use, and safeguard your information when you use QRexact.com.</p>
     <h2>1. Information We Collect</h2>
     <p>We collect minimal information to operate the service:</p>
     <ul>
-      <li><strong>Usage data:</strong> Pages visited, QR codes generated (type and count only — never the content), browser type, and general location (country/region).</li>
-      <li><strong>Payment data:</strong> If you subscribe to a paid plan, payments are processed securely by Stripe. We never see or store your full credit card details.</li>
-      <li><strong>Email address:</strong> Only if you contact us directly or sign up for a paid plan.</li>
+      <li><strong>Usage data:</strong> Pages visited, QR codes generated (type and count only &mdash; never the content), browser type, and general location.</li>
+      <li><strong>Payment data:</strong> Payments are processed securely by Stripe. We never see or store your full card details.</li>
+      <li><strong>Email address:</strong> Only if you contact us or sign up for a paid plan.</li>
     </ul>
-
     <h2>2. QR Code Content</h2>
-    <p>QR codes are generated entirely in your browser. The text, URLs, or data you enter to create a QR code are <strong>not transmitted to or stored on our servers</strong>. Your content stays on your device.</p>
-
+    <p>QR codes are generated entirely in your browser. The text, URLs, or data you enter are <strong>not transmitted to or stored on our servers</strong>. Your content stays on your device.</p>
     <h2>3. How We Use Your Information</h2>
     <ul>
       <li>To provide and improve the QRexact service</li>
@@ -571,149 +557,112 @@
       <li>To respond to support requests</li>
       <li>To analyze aggregate usage trends (never individual content)</li>
     </ul>
-
     <h2>4. Cookies &amp; Analytics</h2>
-    <p>We may use lightweight analytics (such as Vercel Analytics) to understand how visitors use our site. This data is anonymized and does not identify you personally. We do not use advertising cookies or sell your data to third parties.</p>
-
+    <p>We may use lightweight analytics (such as Vercel Analytics) to understand how visitors use our site. This data is anonymized and does not identify you personally. We do not use advertising cookies or sell your data.</p>
     <h2>5. Third-Party Services</h2>
     <ul>
-      <li><strong>Stripe</strong> — payment processing</li>
-      <li><strong>Vercel</strong> — website hosting</li>
+      <li><strong>Stripe</strong> &mdash; payment processing</li>
+      <li><strong>Vercel</strong> &mdash; website hosting</li>
     </ul>
-
     <h2>6. Data Retention</h2>
-    <p>We do not store QR code content. Payment and subscription records are retained as required by law. You may request deletion of your account data at any time by contacting us.</p>
-
+    <p>We do not store QR code content. Payment records are retained as required by law. You may request deletion of your account data by contacting us.</p>
     <h2>7. Children's Privacy</h2>
     <p>QRexact is not directed at children under 13. We do not knowingly collect personal information from children.</p>
-
     <h2>8. Your Rights</h2>
-    <p>Depending on your location, you may have rights to access, correct, or delete your personal data. To exercise these rights, contact us at <a href="mailto:QRexact@gmail.com">QRexact@gmail.com</a>.</p>
-
+    <p>You may have rights to access, correct, or delete your personal data. Contact us at <a href="mailto:QRexact@gmail.com">QRexact@gmail.com</a>.</p>
     <h2>9. Changes to This Policy</h2>
-    <p>We may update this Privacy Policy from time to time. We will post the updated version on this page with a new "Last updated" date.</p>
-
+    <p>We may update this Privacy Policy from time to time and will post the updated version with a new date.</p>
     <h2>10. Contact Us</h2>
-    <p>Questions about this Privacy Policy? Email us at <a href="mailto:QRexact@gmail.com">QRexact@gmail.com</a>.</p>
-
+    <p>Questions? Email us at <a href="mailto:QRexact@gmail.com">QRexact@gmail.com</a>.</p>
     <hr class="sub-divider">
     <p style="color:var(--text3);font-size:12px;">By using QRexact.com, you agree to this Privacy Policy.</p>
   </div>
   <footer>
-    <span>© 2026 QRexact</span>
+    <span>&copy; 2026 QRexact</span>
     <span style="color:var(--blue2)">QRexact.com</span>
-    <span>
-      <a onclick="showPage('home')">Home</a> ·
-      <a onclick="showPage('privacy')">Privacy</a> ·
-      <a onclick="showPage('terms')">Terms</a> ·
-      <a onclick="showPage('contact')">Contact</a>
-    </span>
+    <span><a onclick="showPage('home')">Home</a> &middot; <a onclick="showPage('privacy')">Privacy</a> &middot; <a onclick="showPage('terms')">Terms</a> &middot; <a onclick="showPage('contact')">Contact</a></span>
   </footer>
 </div>
 
-<!-- ═══════════════════════════════════════════════
-     PAGE: TERMS
-════════════════════════════════════════════════ -->
+<!-- ══ PAGE: TERMS ══ -->
 <div id="page-terms" class="page">
   <div class="sub-container">
     <h1>Terms of Service</h1>
     <p class="sub-date">Last updated: March 2026</p>
-    <p>Welcome to QRexact. By accessing or using QRexact.com ("the Service"), you agree to be bound by these Terms of Service. Please read them carefully.</p>
-
+    <p>By accessing or using QRexact.com, you agree to be bound by these Terms of Service. Please read them carefully.</p>
     <h2>1. Acceptance of Terms</h2>
-    <p>By using QRexact, you confirm that you are at least 13 years old and agree to these Terms. If you do not agree, please do not use the Service.</p>
-
+    <p>By using QRexact, you confirm that you are at least 13 years old and agree to these Terms.</p>
     <h2>2. Description of Service</h2>
-    <p>QRexact provides an online QR code generation tool. The Free tier allows limited QR code creation. Pro and Business plans offer expanded features available via a monthly subscription.</p>
-
+    <p>QRexact provides an online QR code generation tool. The Free tier allows limited QR code creation. Pro and Business plans offer expanded features via monthly subscription.</p>
     <h2>3. Acceptable Use</h2>
     <p>You agree not to use QRexact to generate QR codes that:</p>
     <ul>
       <li>Link to illegal content, malware, phishing sites, or spam</li>
       <li>Violate the intellectual property rights of others</li>
       <li>Facilitate fraud, harassment, or abuse</li>
-      <li>Violate any applicable local, state, national, or international law</li>
+      <li>Violate any applicable law</li>
     </ul>
-    <p>We reserve the right to terminate access for violations of this section.</p>
-
     <h2>4. Subscriptions &amp; Payments</h2>
-    <p>Paid plans (Pro at $6.99/month, Business at $19.99/month) are billed monthly through Stripe. By subscribing, you authorize recurring charges to your payment method.</p>
+    <p>Paid plans (Pro at $6.99/month, Business at $19.99/month) are billed monthly through Stripe.</p>
     <ul>
-      <li><strong>Cancellation:</strong> You may cancel your subscription at any time. Access continues until the end of the current billing period.</li>
-      <li><strong>Refunds:</strong> Refunds are evaluated on a case-by-case basis. Contact us within 7 days of a charge if you believe it was made in error.</li>
-      <li><strong>Price changes:</strong> We will provide at least 30 days notice before changing subscription pricing.</li>
+      <li><strong>Cancellation:</strong> Cancel anytime. Access continues until end of billing period.</li>
+      <li><strong>Refunds:</strong> Evaluated case by case. Contact us within 7 days of a charge.</li>
+      <li><strong>Price changes:</strong> 30 days notice before any pricing changes.</li>
     </ul>
-
     <h2>5. Free Tier Limitations</h2>
-    <p>The Free tier allows up to 3 QR code generations per session and includes a QRexact watermark on downloads. Free tier features may be modified or limited at any time.</p>
-
+    <p>The Free tier allows up to 3 QR code generations per session and includes a QRexact watermark on downloads.</p>
     <h2>6. Intellectual Property</h2>
-    <p>QRexact and all associated branding, design, and code are owned by QRexact. You retain ownership of any content you input to generate QR codes. Your content is processed locally in your browser and never stored by us.</p>
-
+    <p>QRexact and all associated branding, design, and code are owned by QRexact. You retain ownership of any content you input. Your content is processed locally in your browser and never stored by us.</p>
     <h2>7. Disclaimer of Warranties</h2>
-    <p>The Service is provided "as is" without warranties of any kind. We do not guarantee that the Service will be available at all times or free from errors.</p>
-
+    <p>The Service is provided "as is" without warranties of any kind. We do not guarantee uninterrupted or error-free service.</p>
     <h2>8. Limitation of Liability</h2>
-    <p>To the maximum extent permitted by law, QRexact shall not be liable for any indirect, incidental, special, or consequential damages arising from your use of the Service.</p>
-
+    <p>To the maximum extent permitted by law, QRexact shall not be liable for any indirect, incidental, or consequential damages arising from your use of the Service.</p>
     <h2>9. Changes to Terms</h2>
-    <p>We may update these Terms from time to time. Continued use of the Service after changes are posted constitutes acceptance of the revised Terms.</p>
-
+    <p>We may update these Terms from time to time. Continued use after changes are posted constitutes acceptance.</p>
     <h2>10. Contact Us</h2>
-    <p>Questions about these Terms? Contact us at <a href="mailto:QRexact@gmail.com">QRexact@gmail.com</a>.</p>
-
+    <p>Questions? Contact us at <a href="mailto:QRexact@gmail.com">QRexact@gmail.com</a>.</p>
     <hr class="sub-divider">
     <p style="color:var(--text3);font-size:12px;">By using QRexact.com, you agree to these Terms of Service.</p>
   </div>
   <footer>
-    <span>© 2026 QRexact</span>
+    <span>&copy; 2026 QRexact</span>
     <span style="color:var(--blue2)">QRexact.com</span>
-    <span>
-      <a onclick="showPage('home')">Home</a> ·
-      <a onclick="showPage('privacy')">Privacy</a> ·
-      <a onclick="showPage('terms')">Terms</a> ·
-      <a onclick="showPage('contact')">Contact</a>
-    </span>
+    <span><a onclick="showPage('home')">Home</a> &middot; <a onclick="showPage('privacy')">Privacy</a> &middot; <a onclick="showPage('terms')">Terms</a> &middot; <a onclick="showPage('contact')">Contact</a></span>
   </footer>
 </div>
 
-<!-- ═══════════════════════════════════════════════
-     PAGE: CONTACT
-════════════════════════════════════════════════ -->
+<!-- ══ PAGE: CONTACT ══ -->
 <div id="page-contact" class="page">
   <div class="sub-container">
     <h1>Contact Us</h1>
     <p class="sub-date">We typically respond within 24 hours.</p>
-
     <div class="contact-cards">
       <div class="contact-card">
-        <span class="card-icon">✉️</span>
+        <span class="card-icon">&#9993;</span>
         <div class="card-title">General Support</div>
         <div class="card-desc">Questions about the app, features, or anything else.</div>
         <a href="mailto:QRexact@gmail.com">QRexact@gmail.com</a>
       </div>
       <div class="contact-card">
-        <span class="card-icon">💳</span>
+        <span class="card-icon">&#128179;</span>
         <div class="card-title">Billing &amp; Subscriptions</div>
         <div class="card-desc">Issues with payments, cancellations, or refund requests.</div>
-        <a href="mailto:QRexact@gmail.com">QRexact@gmail.com</a>
+        <a href="mailto:QRexact@gmail.com?subject=Billing%20Question">QRexact@gmail.com</a>
       </div>
       <div class="contact-card">
-        <span class="card-icon">🐛</span>
+        <span class="card-icon">&#128027;</span>
         <div class="card-title">Report a Bug</div>
         <div class="card-desc">Found something broken? Tell us and we'll fix it fast.</div>
-        <a href="mailto:QRexact@gmail.com">QRexact@gmail.com</a>
+        <a href="mailto:QRexact@gmail.com?subject=Bug%20Report">QRexact@gmail.com</a>
       </div>
       <div class="contact-card">
-        <span class="card-icon">💡</span>
+        <span class="card-icon">&#128161;</span>
         <div class="card-title">Feature Requests</div>
         <div class="card-desc">Have an idea to make QRexact better? We're all ears.</div>
-        <a href="mailto:QRexact@gmail.com">QRexact@gmail.com</a>
+        <a href="mailto:QRexact@gmail.com?subject=Feature%20Request">QRexact@gmail.com</a>
       </div>
     </div>
-
     <div class="faq-title">Frequently Asked Questions</div>
-
     <div class="faq-item">
       <div class="faq-q">How do I cancel my subscription?</div>
       <div class="faq-a">Email us at <a href="mailto:QRexact@gmail.com">QRexact@gmail.com</a> and we'll cancel immediately. You keep access until the end of your billing period.</div>
@@ -724,38 +673,31 @@
     </div>
     <div class="faq-item">
       <div class="faq-q">Can I get a refund?</div>
-      <div class="faq-a">Refunds are handled case by case. Contact us within 7 days of a charge and we'll do our best to make it right.</div>
+      <div class="faq-a">Refunds are handled case by case. Contact us within 7 days of a charge and we'll make it right.</div>
     </div>
     <div class="faq-item">
       <div class="faq-q">What QR code types are supported?</div>
-      <div class="faq-a">QRexact supports URL, plain text, email, phone number, and WiFi QR codes on the free plan. More types on Pro.</div>
+      <div class="faq-a">Free plan supports URL, Text, Email, Phone, and WiFi. More types available on Pro.</div>
     </div>
     <div class="faq-item">
       <div class="faq-q">How long does it take to get a response?</div>
-      <div class="faq-a">We aim to respond to all emails within 24 hours, usually faster.</div>
+      <div class="faq-a">We aim to respond within 24 hours, usually faster.</div>
     </div>
   </div>
   <footer>
-    <span>© 2026 QRexact</span>
+    <span>&copy; 2026 QRexact</span>
     <span style="color:var(--blue2)">QRexact.com</span>
-    <span>
-      <a onclick="showPage('home')">Home</a> ·
-      <a onclick="showPage('privacy')">Privacy</a> ·
-      <a onclick="showPage('terms')">Terms</a> ·
-      <a onclick="showPage('contact')">Contact</a>
-    </span>
+    <span><a onclick="showPage('home')">Home</a> &middot; <a onclick="showPage('privacy')">Privacy</a> &middot; <a onclick="showPage('terms')">Terms</a> &middot; <a onclick="showPage('contact')">Contact</a></span>
   </footer>
 </div>
 
 </div><!-- end .wrapper -->
 
-<!-- ═══════════════════════════════════════════════
-     UPGRADE MODAL (shared)
-════════════════════════════════════════════════ -->
+<!-- MODAL -->
 <div class="modal-overlay" id="modal">
   <div class="modal">
-    <button class="modal-close" onclick="closeModal()">✕</button>
-    <h2 id="modal-title">Upgrade to Pro 🚀</h2>
+    <button class="modal-close" onclick="closeModal()">&#10005;</button>
+    <h2 id="modal-title">Upgrade to Pro &#128640;</h2>
     <p id="modal-desc">Unlock unlimited QR codes, custom branding, scan analytics and much more.</p>
     <ul class="modal-features" id="modal-features">
       <li>Unlimited QR code generation</li>
@@ -768,9 +710,9 @@
     </ul>
     <div class="modal-price">
       <div class="price-big" id="modal-price">$6.99</div>
-      <div class="price-period">per month — cancel anytime</div>
+      <div class="price-period">per month &mdash; cancel anytime</div>
     </div>
-    <button class="btn-plan primary" style="margin-bottom:10px" id="modal-btn" onclick="handleCheckout()">Start Pro — $6.99/month</button>
+    <button class="btn-plan primary" style="margin-bottom:10px" id="modal-btn" onclick="handleCheckout()">Start Pro &mdash; $6.99/month</button>
     <button class="btn-plan" onclick="closeModal()">Maybe later</button>
   </div>
 </div>
@@ -778,11 +720,7 @@
 <!-- TOAST -->
 <div class="toast" id="toast"></div>
 
-<!-- ═══════════════════════════════════════════════
-     JAVASCRIPT
-════════════════════════════════════════════════ -->
-<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
-  // ─── STATE ───
+<script>
   var currentTab     = 'url';
   var qrColor        = '#000000';
   var qrSize         = 200;
@@ -794,14 +732,12 @@
     business: 'https://buy.stripe.com/6oU28s8LGe2d4Bq1zMcZa01'
   };
 
-  // ─── PAGE ROUTING ───
   function showPage(name) {
     document.querySelectorAll('.page').forEach(function(p){ p.classList.remove('active'); });
     document.getElementById('page-' + name).classList.add('active');
-    window.scrollTo(0, 0);
+    window.scrollTo(0,0);
   }
 
-  // ─── TAB SWITCHING ───
   function switchTab(tab, btn) {
     currentTab = tab;
     document.querySelectorAll('.tab').forEach(function(t){ t.classList.remove('active'); });
@@ -810,11 +746,10 @@
     document.getElementById('panel-' + tab).classList.add('active');
   }
 
-  // ─── BUILD CONTENT ───
   function getContent() {
-    switch (currentTab) {
+    switch(currentTab) {
       case 'url':   return document.getElementById('input-url').value.trim() || 'https://qrexact.com';
-      case 'text':  return document.getElementById('input-text').value.trim() || 'QRexact — Create QR codes instantly';
+      case 'text':  return document.getElementById('input-text').value.trim() || 'QRexact';
       case 'email': {
         var em = document.getElementById('input-email').value.trim();
         var su = document.getElementById('input-subject').value.trim();
@@ -836,7 +771,6 @@
     return null;
   }
 
-  // ─── RENDER QR (internal helper - clears container, no counter) ───
   function renderQR(content) {
     var errorMap  = { L:QRCode.CorrectLevel.L, M:QRCode.CorrectLevel.M, H:QRCode.CorrectLevel.H };
     var level     = document.getElementById('error-level').value;
@@ -849,10 +783,9 @@
     });
     document.getElementById('qr-placeholder').style.display = 'none';
     document.getElementById('qr-output').classList.add('visible');
-    document.getElementById('qr-size-display').textContent = qrSize + ' \xd7 ' + qrSize + 'px';
+    document.getElementById('qr-size-display').textContent = qrSize + ' x ' + qrSize + 'px';
   }
 
-  // ─── GENERATE QR (button press - increments counter) ───
   function generateQR() {
     if (codesGenerated >= 3) { openModal('pro'); return; }
     var content = getContent();
@@ -863,7 +796,6 @@
     document.getElementById('free-left').textContent  = Math.max(0, 3 - codesGenerated);
   }
 
-  // ─── COLORS (re-render if QR already showing, no counter increment) ───
   function setColor(color, el) {
     qrColor = color;
     document.querySelectorAll('#color-card .color-swatch').forEach(function(s){ s.classList.remove('selected'); });
@@ -873,6 +805,7 @@
       var c = getContent(); if (c) renderQR(c);
     }
   }
+
   function setColorPicker(color) {
     qrColor = color;
     document.querySelectorAll('#color-card .color-swatch').forEach(function(s){ s.classList.remove('selected'); });
@@ -881,62 +814,54 @@
     }
   }
 
-  // ─── SIZE ───
   function updateSize(val) {
     qrSize = parseInt(val);
     document.getElementById('size-label').textContent = val + 'px';
   }
 
-  // ─── DOWNLOAD PNG ───
   function downloadPNG() {
     var canvas = document.querySelector('#qr-code-container canvas');
     if (!canvas) { showToast('Generate a QR code first!'); return; }
-
-    var padding = 20; var wmH = 24;
+    var pad = 20; var wmH = 24;
     var tmp = document.createElement('canvas');
-    tmp.width  = canvas.width  + padding * 2;
-    tmp.height = canvas.height + padding * 2 + wmH;
+    tmp.width  = canvas.width  + pad * 2;
+    tmp.height = canvas.height + pad * 2 + wmH;
     var ctx = tmp.getContext('2d');
     ctx.fillStyle = '#ffffff';
     ctx.fillRect(0, 0, tmp.width, tmp.height);
-    ctx.drawImage(canvas, padding, padding);
+    ctx.drawImage(canvas, pad, pad);
     ctx.fillStyle = '#9ca3af'; ctx.font = '11px monospace'; ctx.textAlign = 'center';
     ctx.fillText('QRexact.com', tmp.width / 2, tmp.height - 6);
-
     var link = document.createElement('a');
     link.download = 'qrexact-code.png';
     link.href = tmp.toDataURL('image/png');
     link.click();
-    showToast('✓ QR Code downloaded!');
+    showToast('QR Code downloaded!');
   }
 
-  // ─── MODAL ───
   function openModal(plan) {
     selectedPlan = plan || 'pro';
     var isPro = selectedPlan === 'pro';
-
-    document.getElementById('modal-title').textContent = isPro ? 'Upgrade to Pro 🚀' : 'Upgrade to Business 💼';
+    document.getElementById('modal-title').textContent = isPro ? 'Upgrade to Pro' : 'Upgrade to Business';
     document.getElementById('modal-price').textContent = isPro ? '$6.99' : '$19.99';
     document.getElementById('modal-desc').textContent  = isPro
       ? 'Unlock unlimited QR codes, custom branding, scan analytics and much more.'
       : 'Everything in Pro plus team access, bulk generation, API and advanced analytics.';
-
     var btn = document.getElementById('modal-btn');
     btn.textContent = isPro ? 'Start Pro — $6.99/month' : 'Start Business — $19.99/month';
     btn.disabled = false;
-
     document.getElementById('modal-features').innerHTML = isPro
       ? '<li>Unlimited QR code generation</li><li>Custom colors &amp; logo embedding</li><li>Scan tracking &amp; analytics</li><li>SVG &amp; PDF downloads</li><li>No watermark on codes</li><li>Edit &amp; update QR codes anytime</li><li>Priority email support</li>'
       : '<li>Everything in Pro</li><li>5 team members</li><li>Bulk QR generation</li><li>API access</li><li>Priority support</li><li>Custom domain QR codes</li><li>White label option</li><li>Advanced analytics</li>';
-
     document.getElementById('modal').classList.add('open');
   }
 
-  function closeModal() { document.getElementById('modal').classList.remove('open'); }
+  function closeModal() {
+    document.getElementById('modal').classList.remove('open');
+  }
 
   document.getElementById('modal').addEventListener('click', function(e){ if(e.target===this) closeModal(); });
 
-  // ─── STRIPE ───
   function handleCheckout() {
     var btn = document.getElementById('modal-btn');
     btn.textContent = 'Redirecting...';
@@ -944,33 +869,26 @@
     window.location.href = PAYMENT_LINKS[selectedPlan];
   }
 
-  // ─── TOAST ───
   function showToast(msg) {
     var t = document.getElementById('toast');
-    t.textContent = msg;
-    t.classList.add('show');
+    t.textContent = msg; t.classList.add('show');
     setTimeout(function(){ t.classList.remove('show'); }, 3000);
   }
 
-  // ─── ON LOAD ───
   window.addEventListener('load', function() {
-    // Demo QR on load — does NOT count toward free limit
     setTimeout(function() {
       var container = document.getElementById('qr-code-container');
       container.innerHTML = '';
       new QRCode(container, {
-        text: 'https://qrexact.com',
-        width: 200, height: 200,
-        colorDark: '#000000', colorLight: '#ffffff',
-        correctLevel: QRCode.CorrectLevel.M
+        text:'https://qrexact.com', width:200, height:200,
+        colorDark:'#000000', colorLight:'#ffffff',
+        correctLevel:QRCode.CorrectLevel.M
       });
       document.getElementById('qr-placeholder').style.display = 'none';
       document.getElementById('qr-output').classList.add('visible');
     }, 400);
-
-    // Stripe redirect messages
     var params = new URLSearchParams(window.location.search);
-    if (params.get('success') === 'true')  showToast('🎉 Welcome to Pro! Your account is active.');
+    if (params.get('success') === 'true')  showToast('Welcome to Pro! Your account is active.');
     if (params.get('canceled') === 'true') showToast('Payment canceled. Come back anytime!');
   });
 </script>
