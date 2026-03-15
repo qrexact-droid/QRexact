@@ -149,8 +149,8 @@
   .qr-placeholder p { font-size:13px; text-align:center; line-height:1.6; }
   #qr-output { display:none; flex-direction:column; align-items:center; gap:16px; }
   #qr-output.visible { display:flex; }
-  #qr-code-container { background:white; padding:16px; border-radius:12px; box-shadow:0 0 40px rgba(59,130,246,0.2); }
-  #qr-code-container canvas, #qr-code-container img { display:block; border-radius:4px; }
+  #qr-code-container { background:white; padding:16px; border-radius:12px; box-shadow:0 0 40px rgba(59,130,246,0.2); max-width:100%; overflow:hidden; }
+  #qr-code-container canvas, #qr-code-container img { display:block; border-radius:4px; max-width:100%; height:auto; }
   .qr-meta { text-align:center; }
   .qr-size-label { font-size:11px; color:var(--text3); letter-spacing:0.1em; text-transform:uppercase; }
   .watermark { font-size:10px; color:var(--text3); letter-spacing:0.15em; text-transform:uppercase; margin-top:4px; }
@@ -696,19 +696,19 @@
         <span class="card-icon">💳</span>
         <div class="card-title">Billing &amp; Subscriptions</div>
         <div class="card-desc">Issues with payments, cancellations, or refund requests.</div>
-        <a href="mailto:QRexact@gmail.com?subject=Billing%20Question">QRexact@gmail.com</a>
+        <a href="mailto:QRexact@gmail.com">QRexact@gmail.com</a>
       </div>
       <div class="contact-card">
         <span class="card-icon">🐛</span>
         <div class="card-title">Report a Bug</div>
         <div class="card-desc">Found something broken? Tell us and we'll fix it fast.</div>
-        <a href="mailto:QRexact@gmail.com?subject=Bug%20Report">QRexact@gmail.com</a>
+        <a href="mailto:QRexact@gmail.com">QRexact@gmail.com</a>
       </div>
       <div class="contact-card">
         <span class="card-icon">💡</span>
         <div class="card-title">Feature Requests</div>
         <div class="card-desc">Have an idea to make QRexact better? We're all ears.</div>
-        <a href="mailto:QRexact@gmail.com?subject=Feature%20Request">QRexact@gmail.com</a>
+        <a href="mailto:QRexact@gmail.com">QRexact@gmail.com</a>
       </div>
     </div>
 
@@ -781,7 +781,7 @@
 <!-- ═══════════════════════════════════════════════
      JAVASCRIPT
 ════════════════════════════════════════════════ -->
-<script>
+<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
   // ─── STATE ───
   var currentTab     = 'url';
   var qrColor        = '#000000';
@@ -836,43 +836,49 @@
     return null;
   }
 
-  // ─── GENERATE QR ───
-  function generateQR() {
-    if (codesGenerated >= 3) { openModal('pro'); return; }
-
-    var content = getContent();
-    if (!content) return;
-
-    var errorMap = { L:QRCode.CorrectLevel.L, M:QRCode.CorrectLevel.M, H:QRCode.CorrectLevel.H };
-    var level    = document.getElementById('error-level').value;
+  // ─── RENDER QR (internal helper - clears container, no counter) ───
+  function renderQR(content) {
+    var errorMap  = { L:QRCode.CorrectLevel.L, M:QRCode.CorrectLevel.M, H:QRCode.CorrectLevel.H };
+    var level     = document.getElementById('error-level').value;
     var container = document.getElementById('qr-code-container');
     container.innerHTML = '';
-
     new QRCode(container, {
       text: content, width: qrSize, height: qrSize,
       colorDark: qrColor, colorLight: '#ffffff',
       correctLevel: errorMap[level] || QRCode.CorrectLevel.M
     });
-
     document.getElementById('qr-placeholder').style.display = 'none';
     document.getElementById('qr-output').classList.add('visible');
     document.getElementById('qr-size-display').textContent = qrSize + ' \xd7 ' + qrSize + 'px';
+  }
 
+  // ─── GENERATE QR (button press - increments counter) ───
+  function generateQR() {
+    if (codesGenerated >= 3) { openModal('pro'); return; }
+    var content = getContent();
+    if (!content) return;
+    renderQR(content);
     codesGenerated++;
     document.getElementById('codes-used').textContent = codesGenerated;
     document.getElementById('free-left').textContent  = Math.max(0, 3 - codesGenerated);
   }
 
-  // ─── COLORS ───
+  // ─── COLORS (re-render if QR already showing, no counter increment) ───
   function setColor(color, el) {
     qrColor = color;
     document.querySelectorAll('#color-card .color-swatch').forEach(function(s){ s.classList.remove('selected'); });
     el.classList.add('selected');
     document.getElementById('dark-color').value = color;
+    if (document.getElementById('qr-output').classList.contains('visible')) {
+      var c = getContent(); if (c) renderQR(c);
+    }
   }
   function setColorPicker(color) {
     qrColor = color;
     document.querySelectorAll('#color-card .color-swatch').forEach(function(s){ s.classList.remove('selected'); });
+    if (document.getElementById('qr-output').classList.contains('visible')) {
+      var c = getContent(); if (c) renderQR(c);
+    }
   }
 
   // ─── SIZE ───
@@ -933,24 +939,31 @@
   // ─── STRIPE ───
   function handleCheckout() {
     var btn = document.getElementById('modal-btn');
-    btn.textContent = 'Redirecting...'; btn.disabled = true;
+    btn.textContent = 'Redirecting...';
+    btn.disabled = true;
     window.location.href = PAYMENT_LINKS[selectedPlan];
   }
 
   // ─── TOAST ───
   function showToast(msg) {
     var t = document.getElementById('toast');
-    t.textContent = msg; t.classList.add('show');
+    t.textContent = msg;
+    t.classList.add('show');
     setTimeout(function(){ t.classList.remove('show'); }, 3000);
   }
 
   // ─── ON LOAD ───
   window.addEventListener('load', function() {
-    // Demo QR — does NOT count toward free limit
+    // Demo QR on load — does NOT count toward free limit
     setTimeout(function() {
-      var c = document.getElementById('qr-code-container');
-      c.innerHTML = '';
-      new QRCode(c, { text:'https://qrexact.com', width:200, height:200, colorDark:'#000000', colorLight:'#ffffff', correctLevel:QRCode.CorrectLevel.M });
+      var container = document.getElementById('qr-code-container');
+      container.innerHTML = '';
+      new QRCode(container, {
+        text: 'https://qrexact.com',
+        width: 200, height: 200,
+        colorDark: '#000000', colorLight: '#ffffff',
+        correctLevel: QRCode.CorrectLevel.M
+      });
       document.getElementById('qr-placeholder').style.display = 'none';
       document.getElementById('qr-output').classList.add('visible');
     }, 400);
